@@ -31,33 +31,6 @@ public class Gurgle {
 		}
 	}
 
-	//testing purposes only
-	@SuppressWarnings("unused")
-	public static void loadWordsDummy() {
-		Set<String> dummy = new HashSet<>();
-		dummy.add("test");
-		dummy.add("gnat");
-		dummy.add("hope");
-		dummy.add("moist");
-		dummy.add("speak");
-		dummy.add("jovial");
-		dummy.add("knaves");
-		dummy.add("loiter");
-		dummy.add("quixote");
-		dummy.add("worried");
-		dummy.add("riveting");
-
-		for (String word : dummy) {
-			if (word.length() >= 4) {
-				allWords.add(word);
-				if (!wordsByLength.containsKey(word.length())) {
-					wordsByLength.put(word.length(), new ArrayList<>());
-				}
-				wordsByLength.get(word.length()).add(word);
-			}
-		}
-	}
-
 	public static LetterGrade[] grade(char[] attempt, String answer) {
 		LetterGrade[] grades = new LetterGrade[attempt.length];
 		char[] answerArr = answer.toCharArray();

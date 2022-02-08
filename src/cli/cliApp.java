@@ -22,15 +22,14 @@ public class cliApp {
 						case "q":
 							System.out.println("Quitting...");
 							return;
-						case "b":
+						case "r":
 							System.out.println("Beginning a new round with a random word length.");
 							currentRound = new Round();
 							System.out.println("Word length: " + currentRound.getLength());
 							break;
-						case "5":
-							System.out.println("Beginning a new round.");
+						case "b":
+							System.out.println("Beginning a new round with a default word length of 5.");
 							currentRound = new Round(5);
-							System.out.println("Word length: " + currentRound.getLength());
 							break;
 						default:
 							System.out.println("Invalid input.");
@@ -47,7 +46,12 @@ public class cliApp {
 					}
 
 					if (currentRound.getGameOver()) {
-						System.out.println("Won in " + currentRound.getCurrentAttempts());
+						if (currentRound.getGameWon()) {
+							System.out.println("Won in " + currentRound.getCurrentAttempts());
+						}
+						else {
+							System.out.println("Oops! The correct answer was " + currentRound.getCurrentWord());
+						}
 						currentRound = null;
 					}
 				}

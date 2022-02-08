@@ -6,6 +6,7 @@ public class Round {
 	private final String currentWord;
 	private int currentAttempts = 0;
 	private boolean gameOver = false;
+	private Boolean gameWon = null;
 	public LetterGrade[][] grades;
 
 	public Round(int length) {
@@ -31,7 +32,10 @@ public class Round {
 	}
 
 	public LetterGrade[] grade(String input) {
-		if (input.length() != currentWord.length()) {
+		if (this.gameOver) {
+			throw new RuntimeException("This round is no more. It has ceased to be. It has expired and gone to meet its maker.");
+		}
+		else if (input.length() != currentWord.length()) {
 			throw new RuntimeException("Guess must be of same length as answer");
 		}
 		else if (!Gurgle.allWords.contains(input)) {
@@ -46,8 +50,28 @@ public class Round {
 				break;
 			}
 		}
-		this.gameOver = allCorrect;
+		if (allCorrect) {
+			this.gameOver = true;
+			this.gameWon = true;
+		}
+		else if (this.currentAttempts >= MAX_ATTEMPTS) {
+			this.gameOver = true;
+			this.gameWon = false;
+		}
 		return grade;
+	}
+
+	public String getCurrentWord() {
+		if (this.gameOver) {
+			return this.currentWord;
+		}
+		else {
+			throw new RuntimeException("Can't reveal word unless game has been won");
+		}
+	}
+
+	public Boolean getGameWon() {
+		return this.gameWon;
 	}
 
 	public int getCurrentAttempts() {
