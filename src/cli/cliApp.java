@@ -8,9 +8,11 @@ import java.util.Scanner;
 
 public class cliApp {
 	private static Round currentRound = null;
+	private static final String MENU_MESSAGE = "Press q to quit, b to begin a game, 5 to start a 5-letter round.";
 
 	public static void main(String[] args) {
 		Gurgle.loadWords();
+		System.out.println(MENU_MESSAGE);
 		try(Scanner scanner = new Scanner(System.in)) {
 			while (true) {
 				String input = scanner.next();
@@ -31,7 +33,8 @@ public class cliApp {
 							System.out.println("Word length: " + currentRound.getLength());
 							break;
 						default:
-							System.out.println("Press q to quit, b to begin a game, 5 to start a 5-letter round.");
+							System.out.println("Invalid input.");
+							System.out.println(MENU_MESSAGE);
 					}
 				}
 				//in a round
@@ -57,13 +60,13 @@ public class cliApp {
 		for (LetterGrade grade : grades) {
 			switch (grade) {
 				case CORRECT:
-					builder.append("v ");
+					builder.append("v");
 					break;
 				case WRONG:
-					builder.append("  ");
+					builder.append(" ");
 					break;
 				case RIGHT_LETTER:
-					builder.append("? ");
+					builder.append("?");
 					break;
 			}
 		}

@@ -1,5 +1,7 @@
 package logic;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Gurgle {
@@ -8,6 +10,30 @@ public class Gurgle {
 
 	//load only words longer than 4 characters
 	public static void loadWords() {
+		File dictionary = new File("resources/dictionary.csv");
+		if (!dictionary.exists()) {
+			throw new RuntimeException("Dictionary does not exist");
+		}
+		try(Scanner scanner = new Scanner(dictionary)) {
+			while (scanner.hasNext()) {
+				String word = scanner.nextLine();
+				if (word.length() >= 4) {
+					allWords.add(word);
+					if (!wordsByLength.containsKey(word.length())) {
+						wordsByLength.put(word.length(), new ArrayList<>());
+					}
+					wordsByLength.get(word.length()).add(word);
+				}
+			}
+			System.out.println(allWords.size() + " words loaded to dictionary.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	//testing purposes only
+	@SuppressWarnings("unused")
+	public static void loadWordsDummy() {
 		Set<String> dummy = new HashSet<>();
 		dummy.add("test");
 		dummy.add("gnat");
