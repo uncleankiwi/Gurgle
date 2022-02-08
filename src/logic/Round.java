@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Arrays;
+
 public class Round {
 	private static final int MAX_ATTEMPTS = 6;
 
@@ -8,6 +10,7 @@ public class Round {
 	private boolean gameOver = false;
 	private Boolean gameWon = null;
 	public LetterGrade[][] grades;
+	public Character[][] attemptLetters;
 
 	public Round(int length) {
 		currentWord = Gurgle.getWord(length);
@@ -20,7 +23,8 @@ public class Round {
 	}
 
 	private void init(int length) {
-		this.grades = new LetterGrade[length][MAX_ATTEMPTS];
+		this.grades = new LetterGrade[MAX_ATTEMPTS][length];
+		this.attemptLetters = new Character[MAX_ATTEMPTS][length];
 	}
 
 	public boolean getGameOver() {
@@ -31,7 +35,7 @@ public class Round {
 		return this.currentWord.length();
 	}
 
-	public LetterGrade[] grade(String input) {
+	public void grade(String input) {
 		if (this.gameOver) {
 			throw new RuntimeException("This round is no more. It has ceased to be. It has expired and gone to meet its maker.");
 		}
@@ -41,15 +45,20 @@ public class Round {
 		else if (!Gurgle.allWords.contains(input)) {
 			throw new RuntimeException("Dictionary does not contain this word");
 		}
-		currentAttempts++;
-		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord);
+
+		//grading, then updating letter/grade trackers, plus watching for a win
 		boolean allCorrect = true;
-		for (LetterGrade letterGrade : grade) {
-			if (letterGrade != LetterGrade.CORRECT) {
+		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord);
+		for (int i = 0; i < currentWord.length(); i++) {
+			attemptLetters[currentAttempts][i] = input.toCharArray()[i];
+			grades[currentAttempts][i] = grade[i];
+			if (grade[i] != LetterGrade.CORRECT) {
 				allCorrect = false;
-				break;
 			}
 		}
+		currentAttempts++;
+
+		//see if the round is over
 		if (allCorrect) {
 			this.gameOver = true;
 			this.gameWon = true;
@@ -58,7 +67,6 @@ public class Round {
 			this.gameOver = true;
 			this.gameWon = false;
 		}
-		return grade;
 	}
 
 	public String getCurrentWord() {

@@ -1,6 +1,5 @@
 package cli;
 
-import logic.Gurgle;
 import logic.LetterGrade;
 import logic.Round;
 
@@ -8,10 +7,9 @@ import java.util.Scanner;
 
 public class cliApp {
 	private static Round currentRound = null;
-	private static final String MENU_MESSAGE = "Press q to quit, b to begin a game, 5 to start a 5-letter round.";
+	private static final String MENU_MESSAGE = "Press q to quit, b to begin a game, r to freeze the application for 8 seconds.";
 
 	public static void main(String[] args) {
-		Gurgle.loadAllWords();
 		System.out.println(MENU_MESSAGE);
 		try(Scanner scanner = new Scanner(System.in)) {
 			while (true) {
@@ -39,7 +37,8 @@ public class cliApp {
 				//in a round
 				else {
 					try {
-						printGrade(currentRound.grade(input));
+						currentRound.grade(input);
+						System.out.println(getLetterGridString());
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
@@ -59,21 +58,44 @@ public class cliApp {
 		}
 	}
 
-	private static void printGrade(LetterGrade[] grades) {
+	private static String getLetterGridString() {
+		//[A] for correct
+		//.A. for right letter
+		// a for wrong
+		// _ for blank
 		StringBuilder builder = new StringBuilder();
-		for (LetterGrade grade : grades) {
-			switch (grade) {
-				case CORRECT:
-					builder.append("v");
-					break;
-				case WRONG:
-					builder.append(" ");
-					break;
-				case RIGHT_LETTER:
-					builder.append("?");
-					break;
+		for (int row = 0; row < currentRound.attemptLetters.length; row++) {
+			for (int col = 0; col < currentRound.getLength(); col++) {
+				Character c = currentRound.attemptLetters[row][col];
+				LetterGrade grade = currentRound.grades[row][col];
+				String prefix = " ";
+				String postfix = " ";
+				if (c != null) {
+					switch (grade) {
+						case CORRECT:
+							prefix = "[";
+							postfix = "]";
+							c = (char) (c - 32);	//transform to uppercase
+							break;
+						case RIGHT_LETTER:
+							prefix = ".";
+							postfix = ".";
+							c = (char) (c - 32);
+							break;
+						default:		//WRONG is here
+							prefix = " ";
+							postfix = " ";
+					}
+				}
+				else {
+					c = '_';	//x_x
+				}
+				builder.append(prefix)
+						.append(c)
+						.append(postfix);
 			}
+			builder.append("\n");
 		}
-		System.out.println(builder.toString());
+		return builder.toString();
 	}
 }

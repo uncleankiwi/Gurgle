@@ -34,6 +34,7 @@ public class Gurgle {
 			List<String> list = (List<String>) objectInputStream.readObject();
 			wordsByLength.put(length, list);
 			allWords.addAll(list);
+			System.out.println("Loaded " + list.size() + " words of length " + length);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
