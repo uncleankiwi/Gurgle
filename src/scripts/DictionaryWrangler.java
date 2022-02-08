@@ -5,6 +5,7 @@ import java.util.*;
 
 /*
 full dictionary: 367,520 words loaded in 1,003 ms
+loading separate .dat files: 8,236 ms
 word length: 4, list size 7186
 word length: 5, list size 15918
 word length: 6, list size 29874
@@ -37,6 +38,7 @@ public class DictionaryWrangler {
 	public static final Map<Integer, List<String>> wordsByLength = new HashMap<>();
 
 	public static void main(String[] args) {
+		filesToLists();
 	}
 
 	@SuppressWarnings({"unused", "SpellCheckingInspection"})
@@ -83,8 +85,50 @@ public class DictionaryWrangler {
 		System.out.println("Saved lists to disk.");
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "unchecked"})
 	private static void filesToLists() {
+		long startTime = System.currentTimeMillis();
 
+		for (int i = 4; i <= 31; i++) {
+			File inFile = new File("resources/words" + i + ".dat");
+			if (!inFile.exists()) {
+				continue;
+			}
+			try(FileInputStream fileInputStream = new FileInputStream(inFile);
+				ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+				wordsByLength.put(i, (List<String>) objectInputStream.readObject());
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("Run time for loading from text: " + (System.currentTimeMillis() - startTime) + " ms");
+
+		for (Map.Entry<Integer, List<String>> entry : wordsByLength.entrySet()) {
+			System.out.println("word length: " + entry.getKey() + ", list size " + entry.getValue().size());
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private static void loadSmallDictionary() {
+		File dictionary = new File("resources/dictionary.csv");
+		if (!dictionary.exists()) {
+			throw new RuntimeException("Dictionary does not exist");
+		}
+		try(Scanner scanner = new Scanner(dictionary)) {
+			while (scanner.hasNext()) {
+				String word = scanner.nextLine();
+				if (word.length() >= 4) {
+					allWords.add(word);
+					if (!wordsByLength.containsKey(word.length())) {
+						wordsByLength.put(word.length(), new ArrayList<>());
+					}
+					wordsByLength.get(word.length()).add(word);
+				}
+			}
+			System.out.println(allWords.size() + " words loaded to dictionary.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

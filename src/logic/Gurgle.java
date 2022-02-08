@@ -1,32 +1,40 @@
 package logic;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class Gurgle {
 	public static final List<String> allWords = new ArrayList<>();
 	public static final Map<Integer, List<String>> wordsByLength = new HashMap<>();
+	public static final int SHORTEST_LENGTH = 4;
+	public static final int LONGEST_LENGTH = 31;
 
-	//load only words longer than 4 characters
-	public static void loadWords() {
-		File dictionary = new File("resources/dictionary.csv");
-		if (!dictionary.exists()) {
-			throw new RuntimeException("Dictionary does not exist");
+	public static void loadAllWords() {
+		for (int i = SHORTEST_LENGTH; i <= LONGEST_LENGTH; i++) {
+			loadWordsOfLength(i);
 		}
-		try(Scanner scanner = new Scanner(dictionary)) {
-			while (scanner.hasNext()) {
-				String word = scanner.nextLine();
-				if (word.length() >= 4) {
-					allWords.add(word);
-					if (!wordsByLength.containsKey(word.length())) {
-						wordsByLength.put(word.length(), new ArrayList<>());
-					}
-					wordsByLength.get(word.length()).add(word);
-				}
-			}
-			System.out.println(allWords.size() + " words loaded to dictionary.");
-		} catch (FileNotFoundException e) {
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void loadWordsOfLength(int length) {
+		//words of this length already loaded. skip.
+		if (wordsByLength.containsKey(length)) {
+			return;
+		}
+
+		//no such words of this length.
+		File inFile = new File("resources/words" + length + ".dat");
+		if (!inFile.exists()) {
+			return;
+		}
+
+		//load from file
+		try(FileInputStream fileInputStream = new FileInputStream(inFile);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+			List<String> list = (List<String>) objectInputStream.readObject();
+			wordsByLength.put(length, list);
+			allWords.addAll(list);
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -55,11 +63,22 @@ public class Gurgle {
 	}
 
 	public static String getWord() {
+		if (allWords.size() == 0) {
+			loadAllWords();
+		}
 		Random random = new Random();
 		return allWords.get((int) (random.nextDouble() * (allWords.size() + 1)));
 	}
 
 	public static String getWord (int length) {
+		//load from file if length is within range
+		if (length < SHORTEST_LENGTH || length > LONGEST_LENGTH) {
+			throw new RuntimeException("Word length must be between " + SHORTEST_LENGTH + " and " + LONGEST_LENGTH);
+		}
+
+		loadWordsOfLength(length);
+
+		//another check, since certain lengths don't have any words - i.e. 26 and 30
 		if (wordsByLength.containsKey(length)) {
 			List<String> wordList = wordsByLength.get(length);
 			if (wordList.size() > 0) {

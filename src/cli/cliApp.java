@@ -11,7 +11,7 @@ public class cliApp {
 	private static final String MENU_MESSAGE = "Press q to quit, b to begin a game, 5 to start a 5-letter round.";
 
 	public static void main(String[] args) {
-		Gurgle.loadWords();
+		Gurgle.loadAllWords();
 		System.out.println(MENU_MESSAGE);
 		try(Scanner scanner = new Scanner(System.in)) {
 			while (true) {
