@@ -1,6 +1,7 @@
 package logic;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Round {
 	private static final int MAX_ATTEMPTS = 6;
@@ -11,6 +12,7 @@ public class Round {
 	private Boolean gameWon = null;
 	public LetterGrade[][] grades;
 	public Character[][] attemptLetters;
+	public Map<Character, KeyState> keyStateMap;
 
 	public Round(int length) {
 		currentWord = Gurgle.getWord(length);
@@ -25,6 +27,10 @@ public class Round {
 	private void init(int length) {
 		this.grades = new LetterGrade[MAX_ATTEMPTS][length];
 		this.attemptLetters = new Character[MAX_ATTEMPTS][length];
+		this.keyStateMap = new HashMap<>();
+		for (int i = 97; i <= 122; i++) {
+			this.keyStateMap.put((char) i, KeyState.NORMAL);
+		}
 	}
 
 	public boolean getGameOver() {
@@ -45,10 +51,11 @@ public class Round {
 		else if (!Gurgle.allWords.contains(input)) {
 			throw new RuntimeException("Dictionary does not contain this word");
 		}
+		input = input.toLowerCase();
 
 		//grading, then updating letter/grade trackers, plus watching for a win
 		boolean allCorrect = true;
-		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord);
+		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord, keyStateMap);
 		for (int i = 0; i < currentWord.length(); i++) {
 			attemptLetters[currentAttempts][i] = input.toCharArray()[i];
 			grades[currentAttempts][i] = grade[i];

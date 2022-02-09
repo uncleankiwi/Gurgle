@@ -1,5 +1,6 @@
 package cli;
 
+import logic.Keys;
 import logic.LetterGrade;
 import logic.Round;
 
@@ -21,13 +22,16 @@ public class cliApp {
 							System.out.println("Quitting...");
 							return;
 						case "r":
-							System.out.println("Beginning a new round with a random word length.");
 							currentRound = new Round();
-							System.out.println("Word length: " + currentRound.getLength());
+							System.out.println(getLetterGridString());
+							System.out.println(getKeyboardString());
+							System.out.println("Beginning a new round with a random word length of " + currentRound.getLength());
 							break;
 						case "b":
-							System.out.println("Beginning a new round with a default word length of 5.");
 							currentRound = new Round(5);
+							System.out.println(getLetterGridString());
+							System.out.println(getKeyboardString());
+							System.out.println("Beginning a new round with a default word length of 5.");
 							break;
 						default:
 							System.out.println("Invalid input.");
@@ -39,8 +43,11 @@ public class cliApp {
 					try {
 						currentRound.grade(input);
 						System.out.println(getLetterGridString());
+						System.out.println(getKeyboardString());
 					}
 					catch (Exception e) {
+						System.out.println(getLetterGridString());
+						System.out.println(getKeyboardString());
 						System.out.println(e.getMessage());
 					}
 
@@ -56,6 +63,40 @@ public class cliApp {
 				}
 			}
 		}
+	}
+
+	private static String getKeyboardString() {
+		StringBuilder builder = new StringBuilder();
+		for (char c : Keys.topRow) {
+			builder.append(getKeyAppearance(c)).append(" ");
+		}
+		builder.append("\n");
+		builder.append("   ");
+		for (char c : Keys.midRow) {
+			builder.append(getKeyAppearance(c)).append(" ");
+		}
+		builder.append("\n");
+		builder.append("      ");
+		for (char c : Keys.bottomRow) {
+			builder.append(getKeyAppearance(c)).append(" ");
+		}
+		builder.append("\n");
+		return builder.toString();
+	}
+
+	private static String getKeyAppearance(char c) {
+		//[A] for present letters
+		//    for absent letters
+		// a  for unknown letters
+		switch (currentRound.keyStateMap.get(c)) {
+			case DARK:
+				return "   ";
+			case LIT:
+				return "[" + (char)(c - 32) + "]";
+			default:
+				return " " + c + " ";
+		}
+
 	}
 
 	private static String getLetterGridString() {

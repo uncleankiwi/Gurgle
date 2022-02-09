@@ -40,7 +40,7 @@ public class Gurgle {
 		}
 	}
 
-	public static LetterGrade[] grade(char[] attempt, String answer) {
+	public static LetterGrade[] grade(char[] attempt, String answer, Map<Character, KeyState> keyStateMap) {
 		LetterGrade[] grades = new LetterGrade[attempt.length];
 		char[] answerArr = answer.toCharArray();
 		Set<Character> answerLetterSet = new HashSet<>();
@@ -52,12 +52,15 @@ public class Gurgle {
 		for (int i = 0; i < attempt.length; i++) {
 			if (answerArr[i] == attempt[i]) {
 				grades[i] = LetterGrade.CORRECT;
+				keyStateMap.replace(attempt[i], KeyState.LIT);
 			}
 			else if (answerLetterSet.contains(attempt[i])) {
 				grades[i] = LetterGrade.RIGHT_LETTER;
+				keyStateMap.replace(attempt[i], KeyState.LIT);
 			}
 			else {
 				grades[i] = LetterGrade.WRONG;
+				keyStateMap.replace(attempt[i], KeyState.DARK);
 			}
 		}
 		return grades;
