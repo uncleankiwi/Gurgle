@@ -3,10 +3,9 @@ package cli;
 import logic.Keys;
 import logic.LetterGrade;
 import logic.Round;
-
 import java.util.Scanner;
 
-public class cliApp {
+public class CLIApp {
 	private static Round currentRound = null;
 	private static final String MENU_MESSAGE = "Press q to quit, b to begin a game, r to freeze the application for 8 seconds.";
 
@@ -89,11 +88,13 @@ public class cliApp {
 		//[A] for present letters
 		//    for absent letters
 		// a  for unknown letters
-		switch (currentRound.keyStateMap.get(c)) {
-			case DARK:
+		switch (currentRound.letterGradeMap.get(c)) {
+			case WRONG:
 				return "   ";
-			case LIT:
+			case CORRECT:
 				return "[" + (char)(c - 32) + "]";
+			case RIGHT_LETTER:
+				return "." + (char)(c - 32) + ".";
 			default:
 				return " " + c + " ";
 		}

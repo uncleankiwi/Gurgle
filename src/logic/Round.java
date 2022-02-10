@@ -12,7 +12,7 @@ public class Round {
 	private Boolean gameWon = null;
 	public LetterGrade[][] grades;
 	public Character[][] attemptLetters;
-	public Map<Character, KeyState> keyStateMap;
+	public Map<Character, LetterGrade> letterGradeMap;
 
 	public Round(int length) {
 		currentWord = Gurgle.getWord(length);
@@ -27,9 +27,9 @@ public class Round {
 	private void init(int length) {
 		this.grades = new LetterGrade[MAX_ATTEMPTS][length];
 		this.attemptLetters = new Character[MAX_ATTEMPTS][length];
-		this.keyStateMap = new HashMap<>();
+		this.letterGradeMap = new HashMap<>();
 		for (int i = 97; i <= 122; i++) {
-			this.keyStateMap.put((char) i, KeyState.NORMAL);
+			this.letterGradeMap.put((char) i, LetterGrade.DEFAULT);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class Round {
 
 		//grading, then updating letter/grade trackers, plus watching for a win
 		boolean allCorrect = true;
-		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord, keyStateMap);
+		LetterGrade[] grade = Gurgle.grade(input.toCharArray(), currentWord, letterGradeMap);
 		for (int i = 0; i < currentWord.length(); i++) {
 			attemptLetters[currentAttempts][i] = input.toCharArray()[i];
 			grades[currentAttempts][i] = grade[i];
