@@ -59,6 +59,7 @@ public class cliApp {
 							System.out.println("Oops! The correct answer was " + currentRound.getCurrentWord());
 						}
 						currentRound = null;
+						System.out.println(MENU_MESSAGE);
 					}
 				}
 			}

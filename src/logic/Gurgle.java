@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class Gurgle {
-	public static final List<String> allWords = new ArrayList<>();
+	public static final List<String> commonWords = new ArrayList<>();	//holds the 50% most common words
+	public static final Set<String> allWords = new HashSet<>();
 	public static final Map<Integer, List<String>> wordsByLength = new HashMap<>();
 	public static final int SHORTEST_LENGTH = 4;
 	public static final int LONGEST_LENGTH = 31;
@@ -34,6 +35,13 @@ public class Gurgle {
 			List<String> list = (List<String>) objectInputStream.readObject();
 			wordsByLength.put(length, list);
 			allWords.addAll(list);
+
+			//Picking out the more common words and adding it to a separate list that
+			//contains potential answers.
+			for (int i = 0; i < list.size() / 2; i++) {
+				commonWords.add(list.get(i));
+			}
+
 			System.out.println("Loaded " + list.size() + " words of length " + length);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -67,11 +75,11 @@ public class Gurgle {
 	}
 
 	public static String getWord() {
-		if (allWords.size() == 0) {
+		if (commonWords.size() == 0) {	//we get answers from commonWords, not allWords
 			loadAllWords();
 		}
 		Random random = new Random();
-		return allWords.get((int) (random.nextDouble() * (allWords.size() + 1)));
+		return commonWords.get((int) (random.nextDouble() * (commonWords.size() + 1)));
 	}
 
 	public static String getWord (int length) {
@@ -87,7 +95,8 @@ public class Gurgle {
 			List<String> wordList = wordsByLength.get(length);
 			if (wordList.size() > 0) {
 				Random random = new Random();
-				return wordList.get((int) (random.nextDouble() * (wordList.size() + 1)));
+				//we get only the 50% most common words here
+				return wordList.get((int) (random.nextDouble() * (wordList.size() / 2 + 1)));
 			}
 		}
 		throw new RuntimeException("No words in dictionary of length " + length);
