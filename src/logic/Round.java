@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Round {
-	private static final int MAX_ATTEMPTS = 6;
+	public static final int MAX_ATTEMPTS = 6;
 
 	private final String currentWord;
 	private int currentAttempts = 0;
