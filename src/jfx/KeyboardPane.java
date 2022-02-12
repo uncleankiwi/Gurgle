@@ -12,15 +12,25 @@ public class KeyboardPane extends VBox {
 	private HBox middleRow;
 	private HBox bottomRow;
 
-	public void refreshRound(Round round) {
+	public void refresh(Round round) {
 
 	}
 
 	private static class Key extends Pane {
-		LetterGrade letterGrade = LetterGrade.DEFAULT;
-
-		void flip() {
-
+		void flip(LetterGrade letterGrade) {
+			switch (letterGrade) {
+				case CORRECT:
+					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
+					break;
+				case RIGHT_LETTER:
+					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
+					break;
+				case WRONG:
+					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
+					break;
+				default:
+					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+			}
 		}
 
 	}

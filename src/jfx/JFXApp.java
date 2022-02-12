@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import logic.Round;
 
 public class JFXApp extends Application {
+	public static final Color BACKGROUND_BLACK = Color.rgb(18, 18, 19);
 	public static final Color LIGHT_GRAY = Color.rgb(129,131,132);
 	public static final Color DARK_GRAY = Color.rgb(58, 58, 60);
 	public static final Color OCHRE = Color.rgb(181,159,59);
@@ -20,8 +21,8 @@ public class JFXApp extends Application {
 
 	private static final int DEFAULT_LENGTH = 5;
 
-	private final Button btnBeginRound = new Button("_Begin a new round (alt + b)");
-	private final Button btnBeginRandomRound = new Button("Begin a round with a _random word length (alt + r)");
+	private final Button btnBeginRound = new NonFocusButton("_Begin a new round (alt + b)");
+	private final Button btnBeginRandomRound = new NonFocusButton("Begin a round with a _random word length (alt + r)");
 	private final LetterGridPane letterGridPane = new LetterGridPane();
 	private final KeyboardPane keyboardPane = new KeyboardPane();
 
@@ -37,14 +38,13 @@ public class JFXApp extends Application {
 		uiWrapper.setAlignment(Pos.CENTER);
 
 		btnBeginRound.setOnAction(e -> beginRound(DEFAULT_LENGTH));
-		btnBeginRound.setFocusTraversable(false);
 		btnBeginRandomRound.setOnAction(e -> {
 			showToast("Random length round begins.");
 			showToast("Not really.");
 		});
-		btnBeginRandomRound.setFocusTraversable(false);
-
+		uiWrapper.setStyle("-fx-background-color: #" + ColourToHex.convert(BACKGROUND_BLACK));
 		uiWrapper.getChildren().addAll(btnBeginRound, btnBeginRandomRound, letterGridPane, keyboardPane);
+
 		Scene scene = new Scene(uiWrapper);
 		scene.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.ENTER) {
@@ -57,6 +57,7 @@ public class JFXApp extends Application {
 				letterGridPane.letter(e.getText());
 			}
 		});
+		scene.setFill(BACKGROUND_BLACK);
 
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);

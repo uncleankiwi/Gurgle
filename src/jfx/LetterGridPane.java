@@ -13,15 +13,12 @@ import logic.Round;
 
 
 public class LetterGridPane extends GridPane {
+	private static final double GAP_SIZE = 5d;
+
 	private Round round = null;
 	private LetterPane[][] letterPanes;
 	private Integer currentRow = null;
 	private Integer currentCol = null;
-
-
-	public LetterGridPane() {
-
-	}
 
 	public void letter(String letter) {
 		if (currentRow != null && currentCol != null && currentCol < round.getLength()) {
@@ -85,15 +82,18 @@ public class LetterGridPane extends GridPane {
 
 	public void setRound(Round round) {
 		this.round = round;
-		this.currentCol = 0;
-		this.currentRow = 0;
-		this.letterPanes = new LetterPane[round.getLength()][Round.MAX_ATTEMPTS];
+		currentCol = 0;
+		currentRow = 0;
+		letterPanes = new LetterPane[round.getLength()][Round.MAX_ATTEMPTS];
 		for (int row = 0; row < Round.MAX_ATTEMPTS; row++) {
 			for (int col = 0; col < round.getLength(); col++) {
-				this.letterPanes[col][row] = new LetterPane();
-				this.add(this.letterPanes[col][row], col, row);
+				letterPanes[col][row] = new LetterPane();
+				add(letterPanes[col][row], col, row);
 			}
 		}
+		setHgap(GAP_SIZE);
+		setVgap(GAP_SIZE);
+		setAlignment(Pos.CENTER);
 
 		//this.setStyle("-fx-border-color: green; -fx-border-width: 1px");
 
