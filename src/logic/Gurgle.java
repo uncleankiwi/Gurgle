@@ -78,9 +78,7 @@ public class Gurgle {
 	}
 
 	public static String getWord() {
-		if (commonWords.size() == 0) {	//we get answers from commonWords, not allWords
-			loadAllWords();
-		}
+		loadAllWords();
 		Random random = new Random();
 		return commonWords.get((int) (random.nextDouble() * (commonWords.size() + 1)));
 	}

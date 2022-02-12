@@ -83,6 +83,7 @@ public class LetterGridPane extends GridPane {
 		this.round = round;
 		currentCol = 0;
 		currentRow = 0;
+		getChildren().clear();
 		letterPanes = new LetterPane[round.getLength()][Round.MAX_ATTEMPTS];
 		for (int row = 0; row < Round.MAX_ATTEMPTS; row++) {
 			for (int col = 0; col < round.getLength(); col++) {
@@ -121,7 +122,8 @@ public class LetterGridPane extends GridPane {
 			this.setAlignment(Pos.CENTER);
 			setMinWidth(SIDE_LENGTH);
 			setMinHeight(SIDE_LENGTH);
-			setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+			this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.BACKGROUND_BLACK));
+			this.setStyle("-fx-border-width: 2px; -fx-border-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
 		}
 
 		void shake() {
@@ -131,16 +133,17 @@ public class LetterGridPane extends GridPane {
 		void flip(LetterGrade letterGrade) {
 			switch (letterGrade) {
 				case CORRECT:
-					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
+					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
 					break;
 				case RIGHT_LETTER:
-					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
+					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
 					break;
 				case WRONG:
-					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
+					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
 					break;
 				default:
-					this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+					this.setStyle("; -fx-background-color: #" + ColourToHex.convert(JFXApp.BACKGROUND_BLACK) +
+							"-fx-border-width: 2px; -fx-border-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
 			}
 		}
 	}

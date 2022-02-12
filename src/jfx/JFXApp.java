@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.Round;
 
+import java.util.Random;
+
 public class JFXApp extends Application {
 	public static final Color BACKGROUND_BLACK = Color.rgb(18, 18, 19);
 	public static final Color LIGHT_GRAY = Color.rgb(129,131,132);
@@ -21,8 +23,10 @@ public class JFXApp extends Application {
 
 	private static final int DEFAULT_LENGTH = 5;
 
-	private final Button btnBeginRound = new NonFocusButton("_Begin a new round (alt + b)");
-	private final Button btnBeginRandomRound = new NonFocusButton("Begin a round with a _random word length (alt + r)");
+	//adding a shortcut with alt key here messes things up since it seems to get toggled
+	//instead of holding it. might not be a problem for other computers?
+	private final Button btnBeginRound = new NonFocusButton("Begin a new round (alt + b)");
+	private final Button btnBeginRandomRound = new NonFocusButton("Begin a round with a random word length (alt + r)");
 	private final LetterGridPane letterGridPane = new LetterGridPane();
 	private final KeyboardPane keyboardPane = new KeyboardPane();
 
@@ -38,10 +42,7 @@ public class JFXApp extends Application {
 		uiWrapper.setAlignment(Pos.CENTER);
 
 		btnBeginRound.setOnAction(e -> beginRound(DEFAULT_LENGTH));
-		btnBeginRandomRound.setOnAction(e -> {
-			showToast("Random length round begins.");
-			showToast("Not really.");
-		});
+		btnBeginRandomRound.setOnAction(e -> beginRound());
 		uiWrapper.setStyle("-fx-background-color: #" + ColourToHex.convert(BACKGROUND_BLACK));
 		uiWrapper.getChildren().addAll(btnBeginRound, btnBeginRandomRound, letterGridPane, keyboardPane);
 
@@ -53,8 +54,17 @@ public class JFXApp extends Application {
 			else if (e.getCode() == KeyCode.BACK_SPACE) {
 				letterGridPane.backspace();
 			}
-			else if (e.getCode().isLetterKey() && !e.isAltDown()) {
-				letterGridPane.letter(e.getText());
+			else if (e.getCode().isLetterKey()) {
+				//some makeshift shortcut combinations since underscoring in buttons is wonky
+				if (e.getText().equalsIgnoreCase("r") && e.isAltDown()) {
+					btnBeginRandomRound.fire();
+				}
+				else if (e.getText().equalsIgnoreCase("b") && e.isAltDown()) {
+					btnBeginRound.fire();
+				}
+				else {
+					letterGridPane.letter(e.getText());
+				}
 			}
 		});
 		scene.setFill(BACKGROUND_BLACK);
@@ -101,6 +111,10 @@ public class JFXApp extends Application {
 		}
 		letterGridPane.setRound(round);
 		keyboardPane.refresh(round);
+	}
+
+	private void beginRound() {
+		beginRound((int) (new Random().nextDouble() * (10 + 1 - 4)) + 4);
 	}
 
 	//message popup at the top
