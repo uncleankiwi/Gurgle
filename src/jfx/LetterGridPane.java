@@ -53,6 +53,12 @@ public class LetterGridPane extends GridPane {
 		}
 	}
 
+	public void bounceWinningRow() {
+		for (int col = 0; col < round.getLength(); col++) {
+			letterPanes[col][round.getCurrentAttempts() - 1].bounce(col * 80);	//ugh
+		}
+	}
+
 	//wag input row upon pressing enter
 	public void shakeInputRow() {
 		if (currentRow != null) {
@@ -146,6 +152,26 @@ public class LetterGridPane extends GridPane {
 			}
 			SequentialTransition sequence = new SequentialTransition();
 			sequence.getChildren().addAll(translation);
+			sequence.play();
+		}
+
+		void bounce(double delay) {
+			if (animating) return;
+			animating = true;
+
+			TranslateTransition delayDummy = new TranslateTransition(Duration.millis(delay), this);
+			delayDummy.setByY(0);
+			delayDummy.setCycleCount(0);
+			delayDummy.setAutoReverse(true);
+
+			TranslateTransition translation = new TranslateTransition(Duration.millis(60), this);
+			translation.setByY(-20);
+			translation.setCycleCount(2);
+			translation.setAutoReverse(true);
+			translation.setOnFinished(e -> animating = false);
+
+			SequentialTransition sequence = new SequentialTransition();
+			sequence.getChildren().addAll(delayDummy, translation);
 			sequence.play();
 		}
 

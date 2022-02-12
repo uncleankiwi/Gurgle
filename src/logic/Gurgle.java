@@ -41,7 +41,7 @@ public class Gurgle {
 
 			//Picking out the more common words and adding it to a separate list that
 			//contains potential answers.
-			for (int i = 0; i < list.size() / 2; i++) {
+			for (int i = 0; i < list.size() / 3; i++) {
 				commonWords.add(list.get(i));
 			}
 
@@ -96,8 +96,8 @@ public class Gurgle {
 			List<String> wordList = wordsByLength.get(length);
 			if (wordList.size() > 0) {
 				Random random = new Random();
-				//we get only the 50% most common words here
-				return wordList.get((int) (random.nextDouble() * (wordList.size() / 2 + 1)));
+				//we get only the 33% most common words here
+				return wordList.get((int) (random.nextDouble() * (wordList.size() / 3 + 1)));
 			}
 		}
 		throw new NoSuchLengthException(length);

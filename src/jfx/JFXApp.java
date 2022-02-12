@@ -88,6 +88,7 @@ public class JFXApp extends Application {
 			keyboardPane.refresh(round);
 			if (round.getGameOver()) {
 				if (round.getGameWon()) {
+					letterGridPane.bounceWinningRow();
 					showToast("You won in " + round.getCurrentAttempts() + " guesses.");
 				}
 				else {
@@ -121,7 +122,7 @@ public class JFXApp extends Application {
 
 	//message popup at the top
 	private void showToast(String msg) {
-		Toast toast = new Toast(stage, msg, 500, 1000, 500);
+		new Toast(stage, msg, 500, 1000, 500);
 //		System.out.println(msg);
 	}
 }
