@@ -121,7 +121,7 @@ public class JFXApp extends Application {
 
 	//message popup at the top
 	private void showToast(String msg) {
-		Toast toast = new Toast(stage, msg, 1000, 200, 1000);
+		Toast toast = new Toast(stage, msg, 500, 1000, 500);
 //		System.out.println(msg);
 	}
 }

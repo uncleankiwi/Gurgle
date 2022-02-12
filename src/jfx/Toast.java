@@ -26,7 +26,7 @@ public class Toast {
 		label.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
 		label.setPadding(new Insets(5));
 		HBox hBox = new HBox();
-		hBox.setStyle("-fx-background-color: #eeeeeeff; -fx-border-radius: 20;");
+		hBox.setStyle("-fx-background-color: #eeeeeeff; -fx-background-radius: 5;");
 		hBox.getChildren().add(label);
 		Scene scene = new Scene(hBox);
 		scene.setFill(Color.TRANSPARENT);
@@ -44,9 +44,7 @@ public class Toast {
 		timeline.getKeyFrames().add(fadeInFrame);
 		timeline.getKeyFrames().add(fadeOutFrame);
 		timeline.getKeyFrames().add(unchangingFrame);
-		timeline.setOnFinished(e -> {
-			childStage.close();
-		});
+		timeline.setOnFinished(e -> childStage.close());
 		timeline.play();
 
 	}

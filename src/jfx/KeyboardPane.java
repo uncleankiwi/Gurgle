@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -82,7 +83,7 @@ public class KeyboardPane extends VBox {
 				lblLetter.setMinWidth(DEFAULT_WIDTH);
 				setMinWidth(DEFAULT_WIDTH + GAP_SIZE);
 			}
-			lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+			setLabelColour(JFXApp.LIGHT_GRAY);
 			lblLetter.setText(text);
 			lblLetter.setTextAlignment(TextAlignment.CENTER);
 			lblLetter.setMinHeight(DEFAULT_HEIGHT);
@@ -97,17 +98,23 @@ public class KeyboardPane extends VBox {
 		void flip(LetterGrade letterGrade) {
 			switch (letterGrade) {
 				case CORRECT:
-					lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
+					setLabelColour(JFXApp.GREEN);
 					break;
 				case RIGHT_LETTER:
-					lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
+					setLabelColour(JFXApp.OCHRE);
 					break;
 				case WRONG:
-					lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
+					setLabelColour(JFXApp.DARK_GRAY);
 					break;
 				default:
-					lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+					setLabelColour(JFXApp.LIGHT_GRAY);
 			}
+		}
+
+		private void setLabelColour(Color colour) {
+			lblLetter.setStyle("-fx-background-radius: 4;" +
+					"-fx-background-color: #" + ColourToHex.convert(colour));
+
 		}
 
 	}
