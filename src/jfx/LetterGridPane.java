@@ -1,6 +1,7 @@
 package jfx;
 
 import exceptions.InputNotAllowedException;
+import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
@@ -10,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import logic.LetterGrade;
 import logic.Round;
@@ -55,7 +57,7 @@ public class LetterGridPane extends GridPane {
 
 	public void bounceWinningRow() {
 		for (int col = 0; col < round.getLength(); col++) {
-			letterPanes[col][round.getCurrentAttempts() - 1].bounce(col * 80);	//ugh
+			letterPanes[col][round.getCurrentAttempts() - 1].bounce(80 * col);	//ugh
 		}
 	}
 
@@ -74,7 +76,7 @@ public class LetterGridPane extends GridPane {
 		if (currentRow != null && round != null) {
 			//flipping
 			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[col][currentRow].flip(round.grades[currentRow][col]);	//ugh
+				letterPanes[col][currentRow].flip(round.grades[currentRow][col], 80 * col);	//ugh.
 			}
 
 			if (!round.getGameOver()) {
@@ -175,21 +177,43 @@ public class LetterGridPane extends GridPane {
 			sequence.play();
 		}
 
-		void flip(LetterGrade letterGrade) {
-			switch (letterGrade) {
-				case CORRECT:
-					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
-					break;
-				case RIGHT_LETTER:
-					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
-					break;
-				case WRONG:
-					this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
-					break;
-				default:
-					this.setStyle("; -fx-background-color: #" + ColourToHex.convert(JFXApp.BACKGROUND_BLACK) +
-							"-fx-border-width: 2px; -fx-border-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
-			}
+		void flip(LetterGrade letterGrade, double delay) {
+			//it won't conflict with the translation animations, so we won't check for it here.
+			//they can occur concurrently.
+
+			TranslateTransition delayDummy = new TranslateTransition(Duration.millis(delay), this);
+			delayDummy.setByY(0);
+			delayDummy.setCycleCount(0);
+			delayDummy.setAutoReverse(false);
+
+			ScaleTransition scalingAway = new ScaleTransition(Duration.millis(60), this);
+			scalingAway.setByX(-1);
+			scalingAway.setCycleCount(1);
+			scalingAway.setOnFinished(e -> {
+				switch (letterGrade) {
+					case CORRECT:
+						this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.GREEN));
+						break;
+					case RIGHT_LETTER:
+						this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.OCHRE));
+						break;
+					case WRONG:
+						this.setStyle("-fx-border-width: 0px; -fx-background-color: #" + ColourToHex.convert(JFXApp.DARK_GRAY));
+						break;
+					default:
+						this.setStyle("; -fx-background-color: #" + ColourToHex.convert(JFXApp.BACKGROUND_BLACK) +
+								"-fx-border-width: 2px; -fx-border-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+				}
+			});
+
+			ScaleTransition scalingBack = new ScaleTransition(Duration.millis(60), this);
+			scalingBack.setByX(1);
+			scalingBack.setCycleCount(1);
+			scalingBack.setAutoReverse(false);
+
+			SequentialTransition sequence = new SequentialTransition();
+			sequence.getChildren().addAll(delayDummy, scalingAway, scalingBack);
+			sequence.play();
 		}
 	}
 }
