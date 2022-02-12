@@ -29,6 +29,7 @@ public class JFXApp extends Application {
 	private final Button btnBeginRandomRound = new NonFocusButton("Begin a round with a random word length (alt + r)");
 	private final LetterGridPane letterGridPane = new LetterGridPane();
 	private final KeyboardPane keyboardPane = new KeyboardPane();
+	private Stage stage;
 
 	private Round round = null;
 
@@ -38,6 +39,7 @@ public class JFXApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		this.stage = primaryStage;	//for toast purposes
 		VBox uiWrapper = new VBox();
 		uiWrapper.setAlignment(Pos.CENTER);
 
@@ -119,6 +121,7 @@ public class JFXApp extends Application {
 
 	//message popup at the top
 	private void showToast(String msg) {
-		System.out.println(msg);
+		Toast toast = new Toast(stage, msg, 1000, 200, 1000);
+//		System.out.println(msg);
 	}
 }
