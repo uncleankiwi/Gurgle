@@ -1,6 +1,8 @@
 package jfx;
 
 import exceptions.InputNotAllowedException;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -8,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import logic.LetterGrade;
 import logic.Round;
 
@@ -101,6 +104,7 @@ public class LetterGridPane extends GridPane {
 	private static class LetterPane extends HBox {
 		Label lblLetter = new Label();
 		static final double SIDE_LENGTH = 60d;
+		private boolean animating = false;
 
 		void setText(String str) {
 			this.lblLetter.setText(str);
@@ -127,7 +131,22 @@ public class LetterGridPane extends GridPane {
 		}
 
 		void shake() {
-
+			if (animating) return;
+			animating = true;
+			int[] offsets = new int[]{8, -6, 4, -3, 2};
+			TranslateTransition[] translation = new TranslateTransition[offsets.length];
+			for (int i = 0; i < offsets.length; i++) {
+				translation[i] = new TranslateTransition(Duration.millis(50), this);
+				translation[i].setByX(offsets[i]);
+				translation[i].setCycleCount(2);
+				translation[i].setAutoReverse(true);
+				if (i >= offsets.length - 1) {
+					translation[i].setOnFinished(e -> animating = false);
+				}
+			}
+			SequentialTransition sequence = new SequentialTransition();
+			sequence.getChildren().addAll(translation);
+			sequence.play();
 		}
 
 		void flip(LetterGrade letterGrade) {
