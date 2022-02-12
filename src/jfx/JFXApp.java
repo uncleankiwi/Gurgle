@@ -8,7 +8,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import logic.Gurgle;
 import logic.Round;
 
 public class JFXApp extends Application {
@@ -47,13 +46,7 @@ public class JFXApp extends Application {
 		Scene scene = new Scene(uiWrapper);
 		scene.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.ENTER) {
-				try {
-					String attempt = letterGridPane.enter();
-					this.round.grade(attempt);
-				} catch (InputNotAllowedException inputNotAllowedException) {
-					//do nothing
-				}
-
+				submitAnswer();
 			}
 			else if (e.getCode() == KeyCode.BACK_SPACE) {
 				letterGridPane.backspace();
@@ -66,11 +59,16 @@ public class JFXApp extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Gurgle");
-		primaryStage.setHeight(800d);
+		primaryStage.setHeight(400d);
 		primaryStage.show();
 	}
 
 	private void submitAnswer() {
-
+		try {
+			String attempt = letterGridPane.enter();
+			this.round.grade(attempt);
+		} catch (InputNotAllowedException inputNotAllowedException) {
+			//do nothing
+		}
 	}
 }
