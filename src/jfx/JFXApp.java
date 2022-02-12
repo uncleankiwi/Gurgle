@@ -1,5 +1,6 @@
 package jfx;
 
+import exceptions.InputNotAllowedException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -46,7 +47,13 @@ public class JFXApp extends Application {
 		Scene scene = new Scene(uiWrapper);
 		scene.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.ENTER) {
-				letterGridPane.enter();
+				try {
+					String attempt = letterGridPane.enter();
+					this.round.grade(attempt);
+				} catch (InputNotAllowedException inputNotAllowedException) {
+					//do nothing
+				}
+
 			}
 			else if (e.getCode() == KeyCode.BACK_SPACE) {
 				letterGridPane.backspace();
@@ -59,6 +66,7 @@ public class JFXApp extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Gurgle");
+		primaryStage.setHeight(800d);
 		primaryStage.show();
 	}
 

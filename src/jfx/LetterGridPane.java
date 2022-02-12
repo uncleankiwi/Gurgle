@@ -1,5 +1,6 @@
 package jfx;
 
+import exceptions.InputNotAllowedException;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -9,8 +10,9 @@ import logic.Round;
 
 public class LetterGridPane extends GridPane {
 	private Round round = null;
-	private char[] attempt;
+	private LetterPane[] currentRow = null;
 	private LetterPane[][] letterPanes;
+
 
 	public LetterGridPane() {
 
@@ -20,14 +22,26 @@ public class LetterGridPane extends GridPane {
 		System.out.println(letter + " letter pressed");
 	}
 
-	public void enter() {
-		System.out.println("enter pressed");
-
+	public String enter() throws InputNotAllowedException {
+		return getAttempt();
 	}
 
 	public void backspace() {
 		System.out.println("bksp pressed");
 
+	}
+
+	public String getAttempt() throws InputNotAllowedException {
+		if (currentRow == null) {
+			throw new InputNotAllowedException();
+		}
+		else {
+			StringBuilder builder = new StringBuilder();
+			for (LetterPane letterPane : currentRow) {
+				builder.append(letterPane.getText());
+			}
+			return builder.toString();
+		}
 	}
 
 	//wag input row upon pressing enter
@@ -46,7 +60,6 @@ public class LetterGridPane extends GridPane {
 
 	public void setRound(Round round) {
 		this.round = round;
-		this.attempt = new char[round.getLength()];
 		this.letterPanes = new LetterPane[Round.MAX_ATTEMPTS][round.getLength()];
 		for (int row = 0; row < Round.MAX_ATTEMPTS; row++) {
 			for (int col = 0; col < round.getLength(); col++) {
@@ -68,6 +81,10 @@ public class LetterGridPane extends GridPane {
 
 		void setText(String str) {
 			this.text = str;
+		}
+
+		String getText() {
+			return this.text;
 		}
 
 		LetterPane() {
