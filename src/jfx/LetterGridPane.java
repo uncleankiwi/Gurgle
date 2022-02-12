@@ -187,7 +187,7 @@ public class LetterGridPane extends GridPane {
 			delayDummy.setAutoReverse(false);
 
 			ScaleTransition scalingAway = new ScaleTransition(Duration.millis(60), this);
-			scalingAway.setByX(-1);
+			scalingAway.setByY(-1);
 			scalingAway.setCycleCount(1);
 			scalingAway.setOnFinished(e -> {
 				switch (letterGrade) {
@@ -207,7 +207,7 @@ public class LetterGridPane extends GridPane {
 			});
 
 			ScaleTransition scalingBack = new ScaleTransition(Duration.millis(60), this);
-			scalingBack.setByX(1);
+			scalingBack.setByY(1);
 			scalingBack.setCycleCount(1);
 			scalingBack.setAutoReverse(false);
 

@@ -89,10 +89,31 @@ public class JFXApp extends Application {
 			if (round.getGameOver()) {
 				if (round.getGameWon()) {
 					letterGridPane.bounceWinningRow();
-					showToast("You won in " + round.getCurrentAttempts() + " guesses.");
+					switch(round.getCurrentAttempts()) {
+						case 1:
+							showToast("Genius");
+							break;
+						case 2:
+							showToast("Magnificent");
+							break;
+						case 3:
+							showToast("Impressive");
+							break;
+						case 4:
+							showToast("Splendid");
+							break;
+						case 5:
+							showToast("Great");
+							break;
+						case 6:
+							showToast("Whew");
+							break;
+						default:
+							showToast("You won in " + round.getCurrentAttempts() + " guesses?");
+					}
 				}
 				else {
-					showToast("Answer was " + round.getCurrentWord());
+					showToast("Answer: " + round.getCurrentWord());
 				}
 			}
 		} catch (InputNotAllowedException | GameOverException inputNotAllowedException) {
