@@ -1,9 +1,10 @@
 package jfx;
 
 import exceptions.InputNotAllowedException;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -49,9 +50,6 @@ public class LetterGridPane extends GridPane {
 			for (int col = 0; col < round.getLength(); col++) {
 				builder.append(letterPanes[col][currentRow].getText());
 			}
-//			for (LetterPane letterPane : letterPanes[currentRow]) {
-//				builder.append(letterPane.getText());
-//			}
 			return builder.toString();
 		}
 	}
@@ -97,11 +95,11 @@ public class LetterGridPane extends GridPane {
 			}
 		}
 
-		this.setStyle("-fx-border-color: green; -fx-border-width: 1px"); //todo
+		//this.setStyle("-fx-border-color: green; -fx-border-width: 1px");
 
 	}
 
-	private static class LetterPane extends Pane {
+	private static class LetterPane extends HBox {
 		Label lblLetter = new Label();
 		static final double SIDE_LENGTH = 60d;
 
@@ -114,18 +112,17 @@ public class LetterGridPane extends GridPane {
 		}
 
 		LetterPane() {
-			this.setStyle("-fx-border-color: red; -fx-border-width: 1px");	//todo
-
-			this.getChildren().add(lblLetter);
-			this.lblLetter.setTextAlignment(TextAlignment.CENTER);
-			this.lblLetter.minWidth(SIDE_LENGTH);
-			this.lblLetter.minHeight(SIDE_LENGTH);
-			this.lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 40));
+			getChildren().add(lblLetter);
+			lblLetter.setTextAlignment(TextAlignment.CENTER);
+			lblLetter.minWidth(SIDE_LENGTH);
+			lblLetter.minHeight(SIDE_LENGTH);
+			lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 40));
 			lblLetter.setTextFill(JFXApp.OFF_WHITE);
-			this.lblLetter.setStyle("-fx-border-color: blue; -fx-border-width: 5px;");	//todo
-			this.setMinWidth(SIDE_LENGTH);
-			this.setMinHeight(SIDE_LENGTH);
-			this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
+//			lblLetter.setStyle("-fx-border-color: blue; -fx-border-width: 5px;");
+			this.setAlignment(Pos.CENTER);
+			setMinWidth(SIDE_LENGTH);
+			setMinHeight(SIDE_LENGTH);
+			setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
 		}
 
 		void shake() {
