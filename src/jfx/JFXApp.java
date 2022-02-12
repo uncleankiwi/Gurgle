@@ -1,6 +1,6 @@
 package jfx;
 
-import exceptions.InputNotAllowedException;
+import exceptions.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,12 +33,19 @@ public class JFXApp extends Application {
 		VBox uiWrapper = new VBox();
 
 		btnBeginRound.setOnAction(e -> {
-			this.round = new Round(5);
+			try {
+				this.round = new Round(5);
+			} catch (WrongRequestedLengthException wrongRequestedLengthException) {
+				wrongRequestedLengthException.printStackTrace();
+			} catch (NoSuchLengthException noSuchLengthException) {
+				showToast(noSuchLengthException.getMessage());
+			}
 			letterGridPane.setRound(this.round);
 		});
 		btnBeginRound.setFocusTraversable(false);
 		btnBeginRandomRound.setOnAction(e -> {
-			System.out.println("Random length round begins.");
+			showToast("Random length round begins.");
+			showToast("Not really.");
 		});
 		btnBeginRandomRound.setFocusTraversable(false);
 
@@ -66,9 +73,17 @@ public class JFXApp extends Application {
 	private void submitAnswer() {
 		try {
 			String attempt = letterGridPane.enter();
+			System.out.println(attempt + "<-- attempt");
 			this.round.grade(attempt);
-		} catch (InputNotAllowedException inputNotAllowedException) {
+		} catch (InputNotAllowedException | GameOverException inputNotAllowedException) {
 			//do nothing
+		} catch (NoSuchWordException | WrongGuessLengthException e) {
+			showToast(e.getMessage());
 		}
+	}
+
+	//message popup at the top
+	private void showToast(String msg) {
+		System.out.println(msg);
 	}
 }

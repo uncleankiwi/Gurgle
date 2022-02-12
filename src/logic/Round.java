@@ -1,5 +1,7 @@
 package logic;
 
+import exceptions.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +16,7 @@ public class Round {
 	public Character[][] attemptLetters;
 	public Map<Character, LetterGrade> letterGradeMap;
 
-	public Round(int length) {
+	public Round(int length) throws WrongRequestedLengthException, NoSuchLengthException {
 		currentWord = Gurgle.getWord(length);
 		init(length);
 	}
@@ -41,15 +43,15 @@ public class Round {
 		return this.currentWord.length();
 	}
 
-	public void grade(String input) {
+	public void grade(String input) throws GameOverException, NoSuchWordException, WrongGuessLengthException {
 		if (this.gameOver) {
-			throw new RuntimeException("This round is no more. It has ceased to be. It has expired and gone to meet its maker.");
+			throw new GameOverException();
 		}
 		else if (input.length() != currentWord.length()) {
-			throw new RuntimeException("Guess must be of same length as answer");
+			throw new WrongGuessLengthException();
 		}
 		else if (!Gurgle.allWords.contains(input)) {
-			throw new RuntimeException("Dictionary does not contain this word");
+			throw new NoSuchWordException();
 		}
 		input = input.toLowerCase();
 

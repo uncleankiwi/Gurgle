@@ -1,5 +1,7 @@
 package cli;
 
+import exceptions.NoSuchLengthException;
+import exceptions.WrongRequestedLengthException;
 import logic.Keys;
 import logic.LetterGrade;
 import logic.Round;
@@ -27,7 +29,13 @@ public class CLIApp {
 							System.out.println("Beginning a new round with a random word length of " + currentRound.getLength());
 							break;
 						case "b":
-							currentRound = new Round(5);
+							try {
+								currentRound = new Round(5);
+							} catch (WrongRequestedLengthException e) {
+								e.printStackTrace();
+							} catch (NoSuchLengthException e) {
+								System.out.println(e.getMessage());
+							}
 							System.out.println(getLetterGridString());
 							System.out.println(getKeyboardString());
 							System.out.println("Beginning a new round with a default word length of 5.");

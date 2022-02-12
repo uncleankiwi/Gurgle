@@ -47,9 +47,12 @@ public class LetterGridPane extends GridPane {
 		}
 		else {
 			StringBuilder builder = new StringBuilder();
-			for (LetterPane letterPane : letterPanes[currentRow]) {
-				builder.append(letterPane.getText());
+			for (int col = 0; col < round.getLength(); col++) {
+				builder.append(letterPanes[col][currentRow].getText());
 			}
+//			for (LetterPane letterPane : letterPanes[currentRow]) {
+//				builder.append(letterPane.getText());
+//			}
 			return builder.toString();
 		}
 	}
@@ -86,10 +89,13 @@ public class LetterGridPane extends GridPane {
 
 	public void refreshRound(Round round) {
 		currentCol = 0;
+
 	}
 
 	public void setRound(Round round) {
 		this.round = round;
+		this.currentCol = 0;
+		this.currentRow = 0;
 		this.letterPanes = new LetterPane[round.getLength()][Round.MAX_ATTEMPTS];
 		for (int row = 0; row < Round.MAX_ATTEMPTS; row++) {
 			for (int col = 0; col < round.getLength(); col++) {

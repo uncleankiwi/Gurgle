@@ -1,5 +1,8 @@
 package logic;
 
+import exceptions.NoSuchLengthException;
+import exceptions.WrongRequestedLengthException;
+
 import java.io.*;
 import java.util.*;
 
@@ -82,10 +85,10 @@ public class Gurgle {
 		return commonWords.get((int) (random.nextDouble() * (commonWords.size() + 1)));
 	}
 
-	public static String getWord (int length) {
+	public static String getWord (int length) throws WrongRequestedLengthException, NoSuchLengthException {
 		//load from file if length is within range
 		if (length < SHORTEST_LENGTH || length > LONGEST_LENGTH) {
-			throw new RuntimeException("Word length must be between " + SHORTEST_LENGTH + " and " + LONGEST_LENGTH);
+			throw new WrongRequestedLengthException();
 		}
 
 		loadWordsOfLength(length);
@@ -99,6 +102,6 @@ public class Gurgle {
 				return wordList.get((int) (random.nextDouble() * (wordList.size() / 2 + 1)));
 			}
 		}
-		throw new RuntimeException("No words in dictionary of length " + length);
+		throw new NoSuchLengthException(length);
 	}
 }
