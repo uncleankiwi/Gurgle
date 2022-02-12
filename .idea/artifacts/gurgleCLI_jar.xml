@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="gurgleCLI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/gurgleCLI_jar</output-path>
+    <root id="archive" name="gurgle.jar">
+      <element id="module-output" name="gurgle" />
+    </root>
+  </artifact>
+</component>

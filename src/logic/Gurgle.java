@@ -19,22 +19,15 @@ public class Gurgle {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "CommentedOutCode"})
 	public static void loadWordsOfLength(int length) {
 		//words of this length already loaded. skip.
 		if (wordsByLength.containsKey(length)) {
 			return;
 		}
 
-		//no such words of this length.
-		File inFile = new File("resources/words" + length + ".dat");
-		if (!inFile.exists()) {
-			return;
-		}
-
-		//load from file
-		try(FileInputStream fileInputStream = new FileInputStream(inFile);
-			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+		try(InputStream inputStream = Gurgle.class.getResourceAsStream("/words" + length + ".dat");
+			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
 			List<String> list = (List<String>) objectInputStream.readObject();
 			wordsByLength.put(length, list);
 			allWords.addAll(list);
@@ -49,6 +42,32 @@ public class Gurgle {
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		//don't use the following File() stuff, as files will get moved around when
+		//building to jar. use getResourceAsStream() instead.
+		//no such words of this length.
+//		File inFile = new File("resources/words" + length + ".dat");
+//		if (!inFile.exists()) {
+//			return;
+//		}
+
+		//load from file
+//		try(FileInputStream fileInputStream = new FileInputStream(inFile);
+//			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+//			List<String> list = (List<String>) objectInputStream.readObject();
+//			wordsByLength.put(length, list);
+//			allWords.addAll(list);
+//
+//			//Picking out the more common words and adding it to a separate list that
+//			//contains potential answers.
+//			for (int i = 0; i < list.size() / 3; i++) {
+//				commonWords.add(list.get(i));
+//			}
+//
+//			System.out.println("Loaded " + list.size() + " words of length " + length);
+//		} catch (IOException | ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public static LetterGrade[] grade(char[] attempt, String answer, Map<Character, LetterGrade> letterGradeMap) {
