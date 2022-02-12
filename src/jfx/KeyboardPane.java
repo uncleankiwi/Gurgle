@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import logic.Keys;
 import logic.LetterGrade;
 import logic.Round;
@@ -15,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class KeyboardPane extends VBox {
-	private Round round = null;
 	private final Set<Key> keys = new HashSet<>();
 	private static final double GAP_SIZE = 5d;
 
@@ -52,7 +52,9 @@ public class KeyboardPane extends VBox {
 		setAlignment(Pos.CENTER);
 		setSpacing(GAP_SIZE);
 
-		setStyle("-fx-border-color: red; -fx-border-width: 1px;");	//todo
+		setPadding(new Insets(5));
+
+//		setStyle("-fx-border-color: red; -fx-border-width: 1px;");
 	}
 
 	public void refresh(Round round) {
@@ -66,27 +68,29 @@ public class KeyboardPane extends VBox {
 		char letter;
 
 		Key(char c) {
-			this(String.valueOf(c),false);
+			this(String.valueOf(c).toUpperCase(),false);
 			this.letter = c;
 		}
 
-		@SuppressWarnings("SuspiciousNameCombination")
 		Key(String text, boolean wider) {
-			minHeight(DEFAULT_HEIGHT);
+			setMinHeight(DEFAULT_HEIGHT);
 			if (wider) {
-				minWidth(WIDE_WIDTH);
+				lblLetter.setMinWidth(WIDE_WIDTH);
+				setMinWidth(WIDE_WIDTH + GAP_SIZE);
 			}
 			else {
-				minWidth(DEFAULT_WIDTH);
+				lblLetter.setMinWidth(DEFAULT_WIDTH);
+				setMinWidth(DEFAULT_WIDTH + GAP_SIZE);
 			}
 			lblLetter.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
 			lblLetter.setText(text);
-			lblLetter.minWidth(DEFAULT_WIDTH);
-			lblLetter.minHeight(DEFAULT_HEIGHT);
-			lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
+			lblLetter.setTextAlignment(TextAlignment.CENTER);
+			lblLetter.setMinHeight(DEFAULT_HEIGHT);
+			lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 15));
 			lblLetter.setTextFill(JFXApp.OFF_WHITE);
+			lblLetter.setAlignment(Pos.CENTER);
 			setAlignment(Pos.CENTER);
-			setPadding(new Insets(0, 20, 0, 2));
+			setPadding(new Insets(0, GAP_SIZE / 2, 0, GAP_SIZE / 2));
 			getChildren().add(lblLetter);
 		}
 

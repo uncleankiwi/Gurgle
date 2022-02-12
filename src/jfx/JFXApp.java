@@ -62,8 +62,8 @@ public class JFXApp extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Gurgle");
-		primaryStage.setHeight(600d);
-		primaryStage.setWidth(400d);
+		primaryStage.setHeight(700d);
+		primaryStage.setWidth(700d);
 		beginRound(DEFAULT_LENGTH);
 		primaryStage.show();
 	}

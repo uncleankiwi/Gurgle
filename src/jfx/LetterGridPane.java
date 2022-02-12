@@ -11,7 +11,6 @@ import javafx.scene.text.TextAlignment;
 import logic.LetterGrade;
 import logic.Round;
 
-
 public class LetterGridPane extends GridPane {
 	private static final double GAP_SIZE = 5d;
 
@@ -54,8 +53,8 @@ public class LetterGridPane extends GridPane {
 	//wag input row upon pressing enter
 	public void shakeInputRow() {
 		if (currentRow != null) {
-			for (LetterPane letterPane : letterPanes[currentRow]) {
-				letterPane.shake();
+			for (int col = 0; col < round.getLength(); col++) {
+				letterPanes[col][currentRow].shake();	//ugh
 			}
 		}
 	}
