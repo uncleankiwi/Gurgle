@@ -15,6 +15,7 @@ public class JFXApp extends Application {
 	public static final Color DARK_GRAY = Color.rgb(58, 58, 60);
 	public static final Color OCHRE = Color.rgb(181,159,59);
 	public static final Color GREEN = Color.rgb(83,141,78);
+	public static final Color OFF_WHITE = Color.rgb(215,218,220);
 
 	private final Button btnBeginRound = new Button("_Begin a new round (alt + b)");
 	private final Button btnBeginRandomRound = new Button("Begin a round with a _random random (alt + r)");
@@ -22,7 +23,6 @@ public class JFXApp extends Application {
 	private final KeyboardPane keyboardPane = new KeyboardPane();
 
 	private Round round = null;
-
 
 	public static void main(String[] args) {
 		launch();
@@ -75,9 +75,11 @@ public class JFXApp extends Application {
 			String attempt = letterGridPane.enter();
 			System.out.println(attempt + "<-- attempt");
 			this.round.grade(attempt);
+			letterGridPane.flipAndNextRow();
 		} catch (InputNotAllowedException | GameOverException inputNotAllowedException) {
 			//do nothing
 		} catch (NoSuchWordException | WrongGuessLengthException e) {
+			letterGridPane.shakeInputRow();
 			showToast(e.getMessage());
 		}
 	}

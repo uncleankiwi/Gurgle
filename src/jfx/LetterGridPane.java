@@ -2,7 +2,6 @@ package jfx;
 
 import exceptions.InputNotAllowedException;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -67,29 +66,23 @@ public class LetterGridPane extends GridPane {
 	}
 
 	//flip the input row such that it now shows LetterGrades
-	private void flipInputRow() {
-		if (currentRow != null) {
+	//then enables the next row of LetterPanes for entry, if applicable
+	public void flipAndNextRow() {
+		if (currentRow != null && round != null) {
+			//flipping
 			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[currentRow][col].flip(round.grades[currentRow][col]);
-			}
-			for (LetterPane letterPane : letterPanes[currentRow]) {
-				letterPane.shake();
+				letterPanes[col][currentRow].flip(round.grades[currentRow][col]);	//ugh
 			}
 
-			if (round.getCurrentAttempts() < Round.MAX_ATTEMPTS - 1) {
+			if (!round.getGameOver()) {
 				currentRow++;
 				currentCol = 0;
 			}
 			else {
-				currentRow = null;
 				currentCol = null;
+				currentRow = null;
 			}
 		}
-	}
-
-	public void refreshRound(Round round) {
-		currentCol = 0;
-
 	}
 
 	public void setRound(Round round) {
@@ -101,8 +94,6 @@ public class LetterGridPane extends GridPane {
 			for (int col = 0; col < round.getLength(); col++) {
 				this.letterPanes[col][row] = new LetterPane();
 				this.add(this.letterPanes[col][row], col, row);
-
-				this.letterPanes[col][row].setText(row + ":" + col);		//todo
 			}
 		}
 
@@ -112,7 +103,7 @@ public class LetterGridPane extends GridPane {
 
 	private static class LetterPane extends Pane {
 		Label lblLetter = new Label();
-		static final double SIDE_LENGTH = 48d;
+		static final double SIDE_LENGTH = 60d;
 
 		void setText(String str) {
 			this.lblLetter.setText(str);
@@ -124,12 +115,14 @@ public class LetterGridPane extends GridPane {
 
 		LetterPane() {
 			this.setStyle("-fx-border-color: red; -fx-border-width: 1px");	//todo
+
 			this.getChildren().add(lblLetter);
 			this.lblLetter.setTextAlignment(TextAlignment.CENTER);
 			this.lblLetter.minWidth(SIDE_LENGTH);
 			this.lblLetter.minHeight(SIDE_LENGTH);
-			this.lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 25));
-			this.lblLetter.setStyle("-fx-border-color: blue; -fx-border-width: 5px");	//todo
+			this.lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 40));
+			lblLetter.setTextFill(JFXApp.OFF_WHITE);
+			this.lblLetter.setStyle("-fx-border-color: blue; -fx-border-width: 5px;");	//todo
 			this.setMinWidth(SIDE_LENGTH);
 			this.setMinHeight(SIDE_LENGTH);
 			this.setStyle("-fx-background-color: #" + ColourToHex.convert(JFXApp.LIGHT_GRAY));
