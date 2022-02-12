@@ -96,7 +96,6 @@ public class LetterGridPane extends GridPane {
 		setAlignment(Pos.CENTER);
 
 		//this.setStyle("-fx-border-color: green; -fx-border-width: 1px");
-
 	}
 
 	private static class LetterPane extends HBox {
@@ -119,6 +118,7 @@ public class LetterGridPane extends GridPane {
 			lblLetter.setFont(Font.font("Calibri", FontWeight.BOLD, 40));
 			lblLetter.setTextFill(JFXApp.OFF_WHITE);
 //			lblLetter.setStyle("-fx-border-color: blue; -fx-border-width: 5px;");
+
 			this.setAlignment(Pos.CENTER);
 			setMinWidth(SIDE_LENGTH);
 			setMinHeight(SIDE_LENGTH);

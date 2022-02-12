@@ -73,6 +73,7 @@ public class JFXApp extends Application {
 			String attempt = letterGridPane.enter();
 			this.round.grade(attempt);
 			letterGridPane.flipAndNextRow();
+			keyboardPane.refresh(round);
 			if (round.getGameOver()) {
 				if (round.getGameWon()) {
 					showToast("You won in " + round.getCurrentAttempts() + " guesses.");
@@ -92,13 +93,14 @@ public class JFXApp extends Application {
 	@SuppressWarnings("SameParameterValue")
 	private void beginRound(int length) {
 		try {
-			this.round = new Round(length);
+			round = new Round(length);
 		} catch (WrongRequestedLengthException wrongRequestedLengthException) {
 			//do nothing
 		} catch (NoSuchLengthException noSuchLengthException) {
 			showToast(noSuchLengthException.getMessage());
 		}
-		letterGridPane.setRound(this.round);
+		letterGridPane.setRound(round);
+		keyboardPane.refresh(round);
 	}
 
 	//message popup at the top
