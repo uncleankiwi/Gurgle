@@ -116,7 +116,8 @@ public class Gurgle {
 			if (wordList.size() > 0) {
 				Random random = new Random();
 				//we get only the 33% most common words here
-				return wordList.get((int) (random.nextDouble() * (wordList.size() / 3 + 1)));
+				return wordList.get(0);
+//				return wordList.get((int) (random.nextDouble() * (wordList.size() / 3 + 1)));	//todo
 			}
 		}
 		throw new NoSuchLengthException(length);

@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import logic.LetterGrade;
 import logic.Round;
@@ -57,7 +56,7 @@ public class LetterGridPane extends GridPane {
 
 	public void bounceWinningRow() {
 		for (int col = 0; col < round.getLength(); col++) {
-			letterPanes[col][round.getCurrentAttempts() - 1].bounce(80 * col);	//ugh
+			letterPanes[col][round.getCurrentAttempts() - 1].bounce(200 * col);	//ugh
 		}
 	}
 
@@ -76,7 +75,7 @@ public class LetterGridPane extends GridPane {
 		if (currentRow != null && round != null) {
 			//flipping
 			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[col][currentRow].flip(round.grades[currentRow][col], 80 * col);	//ugh.
+				letterPanes[col][currentRow].flip(round.grades[currentRow][col], 200 * col);	//ugh.
 			}
 
 			if (!round.getGameOver()) {
@@ -158,15 +157,17 @@ public class LetterGridPane extends GridPane {
 		}
 
 		void bounce(double delay) {
+			System.out.println("bounce " + this.getText() + " " + animating);
 			if (animating) return;
 			animating = true;
 
-			TranslateTransition delayDummy = new TranslateTransition(Duration.millis(delay), this);
+			//the additional delay of 1000 is for the previous flip animation to finish
+			TranslateTransition delayDummy = new TranslateTransition(Duration.millis(delay + 1000), this);
 			delayDummy.setByY(0);
 			delayDummy.setCycleCount(0);
 			delayDummy.setAutoReverse(true);
 
-			TranslateTransition translation = new TranslateTransition(Duration.millis(60), this);
+			TranslateTransition translation = new TranslateTransition(Duration.millis(300), this);
 			translation.setByY(-20);
 			translation.setCycleCount(2);
 			translation.setAutoReverse(true);
