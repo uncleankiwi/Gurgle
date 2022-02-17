@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -49,26 +50,10 @@ public class JFXApp extends Application {
 		uiWrapper.getChildren().addAll(btnBeginRound, btnBeginRandomRound, letterGridPane, keyboardPane);
 
 		Scene scene = new Scene(uiWrapper);
-		scene.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.ENTER) {
-				submitAnswer();
-			}
-			else if (e.getCode() == KeyCode.BACK_SPACE) {
-				letterGridPane.backspace();
-			}
-			else if (e.getCode().isLetterKey()) {
-				//some makeshift shortcut combinations since underscoring in buttons is wonky
-				if (e.getText().equalsIgnoreCase("r") && e.isAltDown()) {
-					btnBeginRandomRound.fire();
-				}
-				else if (e.getText().equalsIgnoreCase("b") && e.isAltDown()) {
-					btnBeginRound.fire();
-				}
-				else {
-					letterGridPane.letter(e.getText());
-				}
-			}
-		});
+		//response when actual keyboard is pressed
+		scene.setOnKeyPressed(this::keyPressHandler);
+		//response when UI keyboard is pressed
+		keyboardPane.setOnAction(this::keyPressHandler);
 		scene.setFill(BACKGROUND_BLACK);
 
 		primaryStage.setScene(scene);
@@ -78,6 +63,27 @@ public class JFXApp extends Application {
 		primaryStage.setWidth(700d);
 		beginRound(DEFAULT_LENGTH);
 		primaryStage.show();
+	}
+
+	private void keyPressHandler(KeyEvent e) {
+		if (e.getCode() == KeyCode.ENTER) {
+			submitAnswer();
+		}
+		else if (e.getCode() == KeyCode.BACK_SPACE) {
+			letterGridPane.backspace();
+		}
+		else if (e.getCode().isLetterKey()) {
+			//some makeshift shortcut combinations since underscoring in buttons is wonky
+			if (e.getText().equalsIgnoreCase("r") && e.isAltDown()) {
+				btnBeginRandomRound.fire();
+			}
+			else if (e.getText().equalsIgnoreCase("b") && e.isAltDown()) {
+				btnBeginRound.fire();
+			}
+			else {
+				letterGridPane.letter(e.getText());
+			}
+		}
 	}
 
 	private void submitAnswer() {
