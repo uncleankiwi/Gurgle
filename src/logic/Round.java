@@ -48,7 +48,7 @@ public class Round {
 			throw new GameOverException();
 		}
 		else if (input.length() != currentWord.length()) {
-			throw new WrongGuessLengthException();
+			throw new WrongGuessLengthException(input.length(), currentWord.length());
 		}
 		else if (!Gurgle.allWords.contains(input)) {
 			throw new NoSuchWordException();
