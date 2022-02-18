@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -91,10 +92,7 @@ public class KeyboardPane extends VBox {
 	};
 
 	private void setHandler(Key key) {
-		key.setOnAction(
-				e -> this.setOnAction(
-						event -> new KeyEvent(KeyEvent.KEY_PRESSED, "", "",
-				key.keyCode, false, false, false, false)));
+		key.setOnAction(e -> getParent().fireEvent(e));
 	}
 
 	public void refresh(Round round) {
@@ -137,10 +135,13 @@ public class KeyboardPane extends VBox {
 			setAlignment(Pos.CENTER);
 			setPadding(new Insets(0, GAP_SIZE / 2, 0, GAP_SIZE / 2));
 			//transmuting a click into a KeyEvent of a particular keycode
-			lblLetter.setOnKeyPressed(
-					e -> this.setOnAction(
-					event -> new KeyEvent(KeyEvent.KEY_PRESSED, "", "",
-							keyCode, false, false, false, false)));
+			lblLetter.setOnMouseClicked(
+					e -> {
+						if (e.getButton() == MouseButton.PRIMARY) {
+							getParent().fireEvent(new KeyEvent(KeyEvent.KEY_PRESSED, "", "",
+									keyCode, false, false, false, false));
+						}
+					});
 			getChildren().add(lblLetter);
 		}
 

@@ -81,9 +81,10 @@ public class JFXApp extends Application {
 				btnBeginRound.fire();
 			}
 			else {
-				letterGridPane.letter(e.getText());
+				letterGridPane.letter(e.getCode().toString());
 			}
 		}
+		e.consume();
 	}
 
 	private void submitAnswer() {

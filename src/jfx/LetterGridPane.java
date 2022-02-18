@@ -157,7 +157,6 @@ public class LetterGridPane extends GridPane {
 		}
 
 		void bounce(double delay) {
-			System.out.println("bounce " + this.getText() + " " + animating);
 			if (animating) return;
 			animating = true;
 
