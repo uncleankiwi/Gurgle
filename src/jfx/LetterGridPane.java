@@ -25,7 +25,7 @@ public class LetterGridPane extends GridPane {
 
 	public void letter(String letter) {
 		if (currentRow != null && currentCol != null && currentCol < round.getLength()) {
-			letterPanes[currentCol][currentRow].setText(letter.toLowerCase());
+			letterPanes[currentRow][currentCol].setText(letter.toLowerCase());
 			currentCol++;
 		}
 	}
@@ -37,7 +37,7 @@ public class LetterGridPane extends GridPane {
 	public void backspace() {
 		if (currentRow != null && currentCol != null && currentCol >= 1) {
 			currentCol--;
-			letterPanes[currentCol][currentRow].setText("");
+			letterPanes[currentRow][currentCol].setText("");
 		}
 	}
 
@@ -47,8 +47,8 @@ public class LetterGridPane extends GridPane {
 		}
 		else {
 			StringBuilder builder = new StringBuilder();
-			for (int col = 0; col < round.getLength(); col++) {
-				builder.append(letterPanes[col][currentRow].getText());
+			for (LetterPane letterPane : letterPanes[currentRow]) {
+				builder.append(letterPane.getText());
 			}
 			return builder.toString();
 		}
@@ -56,15 +56,15 @@ public class LetterGridPane extends GridPane {
 
 	public void bounceWinningRow() {
 		for (int col = 0; col < round.getLength(); col++) {
-			letterPanes[col][round.getCurrentAttempts() - 1].bounce(200 * col);	//ugh
+			letterPanes[round.getCurrentAttempts() - 1][col].bounce(200 * col);
 		}
 	}
 
 	//wag input row upon pressing enter
 	public void shakeInputRow() {
 		if (currentRow != null) {
-			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[col][currentRow].shake();	//ugh
+			for (LetterPane letterPane : letterPanes[currentRow]) {
+				letterPane.shake();
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class LetterGridPane extends GridPane {
 		if (currentRow != null && round != null) {
 			//flipping
 			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[col][currentRow].flip(round.grades[currentRow][col], 200 * col);	//ugh.
+				letterPanes[currentRow][col].flip(round.grades[currentRow][col], 200 * col);
 			}
 
 			if (!round.getGameOver()) {
@@ -94,11 +94,11 @@ public class LetterGridPane extends GridPane {
 		currentCol = 0;
 		currentRow = 0;
 		getChildren().clear();
-		letterPanes = new LetterPane[round.getLength()][Round.MAX_ATTEMPTS];
-		for (int row = 0; row < Round.MAX_ATTEMPTS; row++) {
+		letterPanes = new LetterPane[Round.MAX_ATTEMPTS][round.getLength()];
+		for (int attemptRow = 0; attemptRow < Round.MAX_ATTEMPTS; attemptRow++) {
 			for (int col = 0; col < round.getLength(); col++) {
-				letterPanes[col][row] = new LetterPane();
-				add(letterPanes[col][row], col, row);
+				letterPanes[attemptRow][col] = new LetterPane();
+				add(letterPanes[attemptRow][col], col, attemptRow);
 			}
 		}
 		setHgap(GAP_SIZE);
